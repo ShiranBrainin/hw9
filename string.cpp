@@ -2,6 +2,7 @@
 #include <stdio>
 #include "string.h"
 
+
 String::String(){
 	this->data = NULL;
 	this->length=0;
@@ -17,13 +18,14 @@ String::String(const char *str):
 	data(new char[strlen(str) +1]),
 	length(strlen(str)) {
 	strcpy(this->data , str);
+	cout << "wow" << endl;
 }
 
 String::~String(){
 	delete[] this->data;
 } 
 
-String::String& operator=(const String &rhs) {
+String&  String::operator=(const String &rhs) {
 	delete[] this->data;  // maybe just data, no need for "this"?
 	this->length = rhs.length;
 	this->data = new char[rhs.length+1];
@@ -31,7 +33,7 @@ String::String& operator=(const String &rhs) {
 	return *this;
 }
 
-String::String& operator=(const char *str) {
+String& String::operator=(const char *str) {
 	delete[] this->data;
 	this->length = strlen(str);
 	this->data = new char[strlen(str)+1];
@@ -49,33 +51,45 @@ bool String::equals(const char *rhs) const {
 	return (x==0);
 }
 
-void String::split(const char *delimiters, String **output, size_t *size) {
-	char *cur_p = this->data;
-	char *cur_begin_p = cur_p;
+void String::split(const char *delimiters, String **output, size_t *size) const{
+	//char *cur_p = this->data;
+	int cur_p = 0;
+	char *cur_begin_p = this->data+cur_p;
 	int cur_output_size = 0;
 	int cur_str_size = 0;
 	bool just_splitted = false;
-	char *delimiters_p = delimiters;
-	while(cur_p) {
-		while(delimiters_p) {
-			if(cur_p[0]==delimiters_p[0]) {
+	int deli_cnt = 0;
+	//cout << "wow we about to start a while loop" << endl;
+	while(this->data[cur_p]) {
+		//cout << "not good to see it infinity times" << endl
+		while(delimiters[deli_cnt]) {
+			cout << deli_cnt << endl;
+			cout << "we eneted second while" << endl;
+			if(this->data[cur_p]==delimiters[deli_cnt]) {
 				char *temp_str = new char[cur_str_size+1];
 				strncpy(temp_str, cur_begin_p, cur_str_size);
-				*output[cur_output_size] = String(temp_str);
+				cout << cur_str_size << endl;
+				String *out_element = new String(temp_str); 
+				output[cur_output_size] = out_element;
+				cout << "wow" << endl;
 				delete[] temp_str;
 
+				//deli_cnt++;
 				cur_str_size = 0;
-				cur_begin_p = cur_p+1;
+				cur_begin_p = this->data+cur_p+1;
 				cur_output_size++;
 				just_splitted = true;
 			}
 			if (just_splitted) {
+				cout << "we split, deli_cnt = " << delimiters[deli_cnt] << endl;
+				just_splitted = false;
 				break;
 			}
-			delimiters_p++;
+			deli_cnt++;
 		}
 		cur_str_size++;
-		delimiters_p = delimiters;
+		deli_cnt = 0;
+		cout<< this->data[cur_p] <<endl;
 		cur_p++;
 	}
 	*size = cur_output_size;
@@ -83,10 +97,10 @@ void String::split(const char *delimiters, String **output, size_t *size) {
 
 int String::to_integer() const{
 	int out = 0;
-	int temp = sscanf(this->data , %d , &out);
+	/*int temp = sscanf(this->data , %d , &out);
 	if ( temp != this->length){
 		return 0;
-	}
+	}*/
 	return out;
 }
 
