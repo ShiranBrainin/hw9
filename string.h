@@ -5,6 +5,8 @@
 #include <iostream>
 #include <cstring>
 
+using namespace std;
+
 class String {
     char *data;
     size_t length;

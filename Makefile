@@ -1,96 +1,25 @@
-CXX=g++										# gcc is the compiler
-CCLINK=$(CXX) 								# Read variable CC using $(CC)
-CXXFLAGS=-g -Wall -std=c11					# c99 or c11???????
-OBJSF=field.o ip.o port.o string.o			#all of out object files
-OBJSM=main.o
-EXEC=firewall.exe			#our execute file
-RM=rm -rf *.o *.exe libfirewall.so						# make clean command
 
-#g++ -g -Wall -std=c11 
 
-#linker command, creates the execute file from the objects file
-$(EXEC): main.o 					
-	$(CCLINK) -shared main.o -o firewall.exe -llibfirewall -llibinput -L.
-# we have to link it also to libinput.so
+CXX = g++
+CXXFLAGS = -g -Wall -Wextra -L.
+RM = clean
+LINKFLAF = -fPIC -shared
 
-main.o: main.cpp
-	$(CXX) $(CXXFLAGS) -c main.cpp
+LIB_OBJS = string.cpp field.cpp port.cpp ip.cpp
+MAIN_OBGS = main.cpp
 
-libfirewall.so: field.o ip.o port.o string.o
-	$(CXX) -shared field.o ip.o port.o string.o -o libfirewall.so 
+EXECXX = firewall.exe
+EXECXX_LIB = firewall
+SUPP_LIB = input
 
-field.o: field.cpp string.h
-	$(CXX) $(CXXFLAGS) -c -fpic field.cpp
+all::firewall.exe
 
-ip.o: ip.cpp field.h string.h
-	$(CXX) $(CXXFLAGS) -c -fpic ip.cpp
+firewall:
+	$(CXX) $(CXXFLAGS) $(LINKFLAF) $(LIB_OBJS) -o libfirewall.so
 
-port.o: port.cpp field.h string.h
-	$(CXX) $(CXXFLAGS) -c -fpic port.cpp
+firewall.exe: firewall
+	$(CXX) $(CXXFLAGS) main.cpp -o firewall.exe -lfirewall -linput
 
-string.o: string.cpp
-	$(CXX) $(CXXFLAGS) -c -fpic string
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	.cpp
-
-# the command "make clean" will call this rule
-clean:
-	$(RM)			#reading the variable RM
-
+$(RM):
+	rm -rf *.o $(EXECXX) $(EXECXX_LIB)

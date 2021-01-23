@@ -2,6 +2,8 @@
 #define FIELD_H
 
 #include "string.h"
+//#include "ip.h"
+//#include "port.h"
 
 enum field_type { IP=0, PORT, GENERIC };
 

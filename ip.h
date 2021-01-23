@@ -18,6 +18,4 @@ public:
     bool match_value(String val) const;
 };
 
-
-
 #endif
